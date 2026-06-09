@@ -109,6 +109,25 @@ rule('no-emoji', (html) => {
   return errors.length ? { errors } : null;
 });
 
+// ----- Rule: no-centered-headings -----
+rule('no-centered-headings', (html) => {
+  const stripped = html.replace(/<style[\s\S]*?<\/style>/g, '');
+  const errors = [];
+  const lines = stripped.split('\n');
+  lines.forEach((line, i) => {
+    // Match any <h1|h2|h3 ...> opening tag with text-align:center or align=center
+    const m = line.match(/<h[1-3][^>]*?(?:style="[^"]*text-align\s*:\s*center[^"]*"|align="center")/i);
+    if (m) {
+      errors.push({
+        line: i + 1,
+        match: m[0],
+        message: 'Headings must be left-aligned; remove text-align:center or align=center',
+      });
+    }
+  });
+  return errors.length ? { errors } : null;
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
