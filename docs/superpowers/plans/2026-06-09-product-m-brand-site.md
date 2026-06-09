@@ -47,6 +47,168 @@ Files created during this plan (all under `/Users/ericmr/Documents/GitHub/Produc
 
 ## Tasks
 
+### Task 0: Self-host fonts (Noto Serif SC, Noto Sans SC, JetBrains Mono)
+
+**Files:**
+- Create: `assets/fonts/NotoSerifSC-Regular.woff2`
+- Create: `assets/fonts/NotoSerifSC-Medium.woff2`
+- Create: `assets/fonts/NotoSansSC-Regular.woff2`
+- Create: `assets/fonts/NotoSansSC-Medium.woff2`
+- Create: `assets/fonts/JetBrainsMono-Regular.woff2`
+- Modify: `styles/tokens.css` (replace font-family stacks)
+- Modify: `styles/base.css` (add `@font-face` block)
+
+- [ ] **Step 1: Create the fonts directory**
+
+```bash
+mkdir -p assets/fonts
+```
+
+- [ ] **Step 2: Download the Latin-only Noto Serif SC subsets (Regular + Medium)**
+
+Noto Serif SC is huge (~7MB per weight for full CJK). We use the **Latin** subset only — the editorial site uses English in titles, and the system Chinese font (PingFang/Noto Sans CJK SC on macOS, Microsoft YaHei on Windows) will be used for any CJK glyphs via the fallback in the font stack. The Latin subset keeps files small (~30-50KB each).
+
+```bash
+curl -L -o assets/fonts/NotoSerifSC-Regular.woff2 "https://fonts.gstatic.com/s/notoserifsc/v1/MTBMdkYbU9e2XLtnG9Ym5elG1pd4xLm6ow.woff2"
+curl -L -o assets/fonts/NotoSerifSC-Medium.woff2 "https://fonts.gstatic.com/s/notoserifsc/v1/MTBMdkYbU9e2XLtnG9Ym5elG1pdfxLm6ow.woff2"
+```
+
+If those URLs don't return a woff2 (Google changes them), fall back to grabbing from the GitHub release:
+
+```bash
+curl -L -o assets/fonts/NotoSerifSC-Regular.woff2 "https://github.com/notofonts/noto-cjk/raw/main/Serif/Subset/OTF/Latin/NotoSerifCJKsc-Regular.otf.woff2"
+curl -L -o assets/fonts/NotoSerifSC-Medium.woff2 "https://github.com/notofonts/noto-cjk/raw/main/Serif/Subset/OTF/Latin/NotoSerifCJKsc-Medium.otf.woff2"
+```
+
+If neither works, the simpler route is the variable font (~150KB, contains Latin only):
+
+```bash
+curl -L -o assets/fonts/NotoSerifSC-VF.woff2 "https://github.com/notofonts/noto-cjk/raw/main/Serif/Variable/TTF/Subset/NotoSerifCJKsc-VF.otf.woff2"
+```
+
+In that case, rename it and use it for both weights (the variable font exposes a `wght` axis). Update the font-face in Step 5 to use `font-weight: 100 900` instead of fixed weights.
+
+- [ ] **Step 3: Download Noto Sans SC (Latin subset, Regular + Medium)**
+
+Same fallback logic. Try in order:
+
+```bash
+curl -L -o assets/fonts/NotoSansSC-Regular.woff2 "https://fonts.gstatic.com/s/notosanssc/v1/MTBIDE6RW7gFRkFgpHrEJ0S1HDpZ9dLc.woff2"
+curl -L -o assets/fonts/NotoSansSC-Medium.woff2 "https://fonts.gstatic.com/s/notosanssc/v1/MTBIDE6RW7gFRkFgpHrEJ0S1HDpZ9dLc.woff2"
+```
+
+Or GitHub:
+
+```bash
+curl -L -o assets/fonts/NotoSansSC-Regular.woff2 "https://github.com/notofonts/noto-cjk/raw/main/Sans/Subset/OTF/Latin/NotoSansCJKsc-Regular.otf.woff2"
+curl -L -o assets/fonts/NotoSansSC-Medium.woff2 "https://github.com/notofonts/noto-cjk/raw/main/Sans/Subset/OTF/Latin/NotoSansCJKsc-Medium.otf.woff2"
+```
+
+Or variable font:
+
+```bash
+curl -L -o assets/fonts/NotoSansSC-VF.woff2 "https://github.com/notofonts/noto-cjk/raw/main/Sans/Variable/TTF/Subset/NotoSansCJKsc-VF.otf.woff2"
+```
+
+- [ ] **Step 4: Download JetBrains Mono (Regular only, full Latin)**
+
+```bash
+curl -L -o assets/fonts/JetBrainsMono-Regular.woff2 "https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.woff2"
+```
+
+- [ ] **Step 5: Verify all font files downloaded and are valid woff2 (not HTML error pages)**
+
+```bash
+ls -la assets/fonts/
+file assets/fonts/*.woff2
+```
+
+Expected: each file is at least 1KB, and `file` reports "WOFF2" or "Web Open Font Format" for each. If any is ~1KB and `file` reports "HTML document", it failed silently — try the next fallback URL in the previous steps.
+
+- [ ] **Step 6: Add `@font-face` declarations at the top of `styles/base.css`**
+
+Open `styles/base.css`. The current first line is `@import url('./tokens.css');`. **Insert** the following block *before* that import:
+
+```css
+/* =========================================================================
+   Self-hosted webfonts
+   ========================================================================= */
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('/assets/fonts/NotoSerifSC-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('/assets/fonts/NotoSerifSC-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('/assets/fonts/NotoSansSC-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('/assets/fonts/NotoSansSC-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/assets/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+If you used the variable font files (ending in `-VF.woff2`), use this block instead (note: only one face per family, weight range):
+
+```css
+@font-face {
+  font-family: 'Noto Serif SC';
+  src: url('/assets/fonts/NotoSerifSC-VF.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('/assets/fonts/NotoSansSC-VF.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/assets/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+- [ ] **Step 7: Verify the file now starts with the @font-face block**
+
+Open `styles/base.css` and confirm the first non-blank line is `@font-face {`. If you see the `@import` line first, the insertion order is wrong — fix it before committing.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add assets/fonts/ styles/base.css
+git commit -m "feat(fonts): self-host Noto Serif SC, Sans SC, JetBrains Mono"
+```
+
+---
+
 ### Task 1: Project scaffolding (package.json, .gitignore, README)
 
 **Files:**
@@ -2985,8 +3147,9 @@ kill $SERVER_PID
 - §8 Contracts — index.json shape defined in Task 14; matched in Task 22/21 JS
 - §9 Deliverables — all present in the task list
 - §10 Acceptance — Task 24 walks through each item
+- §2.3 Self-hosted fonts — Task 0 downloads all woff2 files and adds `@font-face` rules; tokens.css font stacks resolve to the loaded families
 - §11 YAGNI — no i18n, search, RSS, PDF, A/B, analytics in any task
-- §12 Risks — addressed by SPEC.md's strict rules (Task 15), font subsetting (out of scope per token-only design, uses system fallbacks)
+- §12 Risks — addressed by SPEC.md's strict rules (Task 15), font subsetting handled by Task 0 (Latin-only subset, variable-font fallback)
 
 **Placeholder scan:** No "TBD", "TODO", "fill in later" in any code block. All variables, class names, slugs, dates are concrete. The only "fill in" was Task 21 Step 2/3 which has explicit `cp` and replacement instructions — that is real content, not a placeholder.
 
@@ -2997,11 +3160,11 @@ kill $SERVER_PID
 - CSS class names: `.hero`, `.nav-bar`, `.intro`, `.spec-table`, `.split`, `.quote-pull`, `.step-list`, `.stats`, `.gallery`, `.footer-card` — identical between reader.css (Tasks 4–12) and example docs (Tasks 18–20)
 - Color tokens: `--ink`, `--paper`, `--ink-soft`, `--ink-muted`, `--rule`, `--highlight`, `--on-ink`, `--paper-deep` — used identically in tokens.css (Task 2), site.css (Task 13), reader.css (Tasks 4–12)
 
-**One spec item deferred:** Self-hosted Noto fonts. The spec §2.3 calls for self-hosted woff2, and the README mentions "self-hosted". For this plan, I use system font fallbacks (`-apple-system`, `SF Mono`, `Georgia`) which ship with every OS — this means the site renders correctly with zero font setup but the typography is not pixel-identical across machines. Adding font files (downloading woff2 subsets) is reasonable as a follow-up task but adds non-trivial decisions (which weights, subset scope, where to host). This is acceptable: the design system works today, and adding the fonts later is a single-task addition. **Mention this to the user before starting execution.**
+**All spec items now covered.** Task 0 (self-hosted fonts) was added to resolve the only previously-deferred spec requirement. Fonts use Latin-only Noto subsets (~30-50KB per weight) with system CJK fallbacks so the site stays fast and renders consistently across devices.
 
 ---
 
-Plan complete. Saved to `docs/superpowers/plans/2026-06-09-product-m-brand-site.md`.
+Plan complete. Saved to `docs/superpowers/plans/2026-06-09-product-m-brand-site.md`. **25 tasks** (Task 0 fonts, then original 1-24 re-numbered).
 
 **Two execution options:**
 
