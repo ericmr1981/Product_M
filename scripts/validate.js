@@ -17,6 +17,29 @@ const path = require('path');
 
 const RULES = [];
 
+// ----- Rule: frontmatter-presence -----
+rule('frontmatter-presence', (html) => {
+  const errors = [];
+  const match = html.match(/<!--\s*@meta\s*(\{[\s\S]*?\})\s*-->/);
+  if (!match) {
+    errors.push({ message: 'Missing <!-- @meta ... --> frontmatter comment' });
+    return { errors };
+  }
+  let meta;
+  try {
+    meta = JSON.parse(match[1]);
+  } catch (e) {
+    errors.push({ message: `Invalid JSON in @meta: ${e.message}` });
+    return { errors };
+  }
+  for (const field of ['title', 'series', 'slug', 'date']) {
+    if (meta[field] === undefined) {
+      errors.push({ message: `Field '${field}' missing` });
+    }
+  }
+  return { errors };
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
