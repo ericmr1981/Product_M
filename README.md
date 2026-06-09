@@ -41,3 +41,51 @@ This scans all HTML files, parses the `<!-- @meta ... -->` frontmatter, and writ
 - Document body styles: `styles/reader.css`
 - Site styles: `styles/site.css`
 - Component snippets: `_design-system/components/`
+
+## How to use as an AI agent
+
+Two ways to use this project as an AI agent:
+
+### 1. With MCP (recommended)
+
+Start the MCP server:
+
+```bash
+npm run mcp
+```
+
+Add to your Claude MCP config (`~/.config/claude/mcp.json` on macOS/Linux):
+
+```json
+{
+  "mcpServers": {
+    "product-m": {
+      "command": "node",
+      "args": ["/abs/path/to/Product_M/scripts/mcp-server.js"]
+    }
+  }
+}
+```
+
+You'll get 4 tools: `list_components`, `get_template`, `validate_doc`, `import_doc`. See `mcp/README.md` for the full integration guide and `_design-system/PROMPTS.md` for the recommended workflow.
+
+### 2. With CLI
+
+```bash
+# Validate an HTML file
+npm run validate -- --file <path>
+
+# Validate from stdin
+cat foo.html | npm run validate -- --stdin
+
+# Import an HTML file (validates, writes, rebuilds index)
+npm run import -- <source-html> <target-relative-path>
+```
+
+Example:
+
+```bash
+node scripts/import.js /tmp/draft.html docs/gelato-shake/foo.html
+```
+
+Both paths go through the same `validate.js` code, so results are identical whether you call via MCP or CLI.
