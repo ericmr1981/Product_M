@@ -1,6 +1,35 @@
 {
-  "generated": "2026-06-09T08:11:24.828Z",
+  "generated": "2026-06-09T09:09:26.488Z",
   "documents": [
+    {
+      "title": "海盐荔枝芒芒",
+      "path": "docs/gelato-shake/海盐荔枝芒芒.html",
+      "series": "gelato-shake",
+      "slug": "hai-yan-li-zhi-mang-mang",
+      "date": "2026-06-09",
+      "tags": [
+        "summer-2026",
+        "signature",
+        "double-layer"
+      ],
+      "summary": "蓝黄撞色双层夏日特调 — 北海道+荔枝味 gelato 球现打，¥28 一杯，7 月 1 日首发。",
+      "volume": "04"
+    },
+    {
+      "title": "海盐荔枝芒芒 · 上市企划",
+      "path": "planning/海盐荔枝芒芒-上市企划.html",
+      "series": null,
+      "slug": "hai-yan-li-zhi-mang-mang-launch",
+      "date": "2026-06-09",
+      "tags": [
+        "planning",
+        "launch",
+        "summer-2026",
+        "xiaohongshu"
+      ],
+      "summary": "海盐荔枝芒芒 7 月 1 日首发企划：¥28 定价、76.1% 毛利、3-5 万营销预算、45-70 位达人投放。",
+      "volume": "04"
+    },
     {
       "title": "2026 Summer Launch",
       "path": "planning/2026-summer-launch.html",
@@ -59,7 +88,7 @@
       "slug": "gelato-shake",
       "name": "Gelato Shake",
       "description": "Spoon-thick shakes, made to order.",
-      "count": 1
+      "count": 2
     }
   ]
 }
