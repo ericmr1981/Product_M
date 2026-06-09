@@ -4,7 +4,10 @@
   "private": true,
   "description": "Product M brand site — static editorial site for product documentation",
   "scripts": {
-    "build-index": "node scripts/build-index.js"
+    "build-index": "node scripts/build-index.js",
+    "validate": "node scripts/validate.js",
+    "import": "node scripts/import.js",
+    "mcp": "node scripts/mcp-server.js"
   },
   "engines": {
     "node": ">=18.0.0"
