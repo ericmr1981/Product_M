@@ -81,6 +81,34 @@ rule('required-components', (html) => {
   return null;
 });
 
+// ----- Rule: no-emoji -----
+rule('no-emoji', (html) => {
+  // Strip <style> and <script> blocks first (those may contain CSS/JS text, not visible content)
+  const stripped = html
+    .replace(/<style[\s\S]*?<\/style>/g, '')
+    .replace(/<script[\s\S]*?<\/script>/g, '');
+  // Emoji ranges:
+  //   U+1F300–1FAFF: main emoji block (pictographs, symbols, emoticons, transport)
+  //   U+2600–27BF:   misc symbols + dingbats
+  //   U+1F000–1F1FF: mahjong, playing cards, regional indicators
+  //   U+FE0F:        variation selector (forces emoji presentation)
+  const emojiRe = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F1FF}\u{FE0F}]/gu;
+  const errors = [];
+  const lines = stripped.split('\n');
+  lines.forEach((line, i) => {
+    let m;
+    const re = new RegExp(emojiRe.source, 'gu');
+    while ((m = re.exec(line)) !== null) {
+      errors.push({
+        line: i + 1,
+        match: m[0],
+        message: `Emoji found in content`,
+      });
+    }
+  });
+  return errors.length ? { errors } : null;
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
