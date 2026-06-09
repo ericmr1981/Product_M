@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product M</title>
+  <link rel="stylesheet" href="/styles/site.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="/" class="site-nav-brand">Product M</a>
+    <ul class="site-nav-links">
+      <li><a href="/">首页</a></li>
+      <li><a href="/series/gelato.html">Gelato</a></li>
+      <li><a href="/series/gelato-mix.html">Gelato Mix</a></li>
+      <li><a href="/series/gelato-shake.html">Gelato Shake</a></li>
+      <li><a href="/planning/">企划</a></li>
+    </ul>
+    <div class="site-nav-meta">VOL. 04 · 2026</div>
+  </nav>
+
+  <header class="home-hero">
+    <p class="home-hero-eyebrow">VOL. 04 · SPRING 2026</p>
+    <h1 class="home-hero-title">The Quiet<br><em>Authority</em></h1>
+    <div class="home-hero-rule"></div>
+    <p class="home-hero-tag">A study in restraint, in three flavors.</p>
+  </header>
+
+  <section class="story">
+    <div class="story-grid">
+      <p class="story-eyebrow">— THE BRAND</p>
+      <div class="story-body">
+        <p>
+          Product M makes ice cream the way it used to be made — slowly, in small batches, with ingredients you can pronounce. Three series: the original Gelato, the layered Mix, and the spoon-thick Shake.
+        </p>
+        <p>
+          This site is the archive. Every flavor, every method, every campaign — documented with the same care that goes into making the product.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="series-section">
+    <p class="series-section-eyebrow">— THE SERIES</p>
+    <div class="series-grid" id="series-grid">
+      <p class="empty-state">Loading series…</p>
+    </div>
+  </section>
+
+  <section class="latest-section">
+    <p class="latest-eyebrow">— LATEST</p>
+    <div class="latest-list" id="latest-list">
+      <p class="empty-state">Loading…</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span>Product M</span>
+    <span>© 2026 — All rights reserved</span>
+  </footer>
+
+  <script>
+    fetch('/index.json')
+      .then((r) => r.json())
+      .then((data) => {
+        // Series grid
+        const seriesGrid = document.getElementById('series-grid');
+        const seriesHtml = data.series
+          .map(
+            (s, i) => `
+            <a class="series-card" href="/series/${s.slug}.html">
+              <span class="series-card-num">SERIES · 0${i + 1}</span>
+              <h2 class="series-card-title">${s.name}</h2>
+              <p class="series-card-desc">${s.description}</p>
+              <span class="series-card-link">${s.count} document${s.count === 1 ? '' : 's'} →</span>
+            </a>
+          `
+          )
+          .join('');
+        seriesGrid.innerHTML = seriesHtml;
+
+        // Latest list (top 4)
+        const latest = data.documents.slice(0, 4);
+        const latestList = document.getElementById('latest-list');
+        if (latest.length === 0) {
+          latestList.innerHTML = '<p class="empty-state">No documents yet.</p>';
+          return;
+        }
+        latestList.innerHTML = latest
+          .map((d) => {
+            const seriesName = d.series
+              ? d.series.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+              : 'Planning';
+            return `
+            <a class="latest-item" href="/${d.path}">
+              <span class="latest-item-date">${d.date}</span>
+              <span class="latest-item-title">${d.title}</span>
+              <span class="latest-item-series">${seriesName}</span>
+              <span class="latest-item-arrow">→</span>
+            </a>
+          `;
+          })
+          .join('');
+      });
+  </script>
+</body>
+</html>
