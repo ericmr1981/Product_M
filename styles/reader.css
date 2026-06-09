@@ -226,3 +226,41 @@ section { margin-bottom: var(--sp-16); }
   font-size: var(--fs-md);
   color: var(--ink);
 }
+
+/* =========================================================================
+   5. split-image
+   ========================================================================= */
+.split { margin-bottom: var(--sp-16); }
+
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-12);
+  align-items: center;
+}
+
+.split-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.split-text h2 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-4);
+  line-height: 1.2;
+}
+
+.split-text p {
+  font-size: var(--fs-md);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 480px;
+}
+
+@media (max-width: 720px) {
+  .split-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-8);
+  }
+}
