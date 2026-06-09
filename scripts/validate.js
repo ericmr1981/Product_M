@@ -163,6 +163,37 @@ rule('no-external-resources', (html) => {
   return errors.length ? { errors } : null;
 });
 
+// ----- Rule: no-hardcoded-tokens -----
+rule('no-hardcoded-tokens', (html) => {
+  const errors = [];
+  const lines = html.split('\n');
+  lines.forEach((line, i) => {
+    // Only inspect inline style="..." attributes on elements
+    const styleMatch = line.match(/style=["']([^"']+)["']/i);
+    if (!styleMatch) return;
+    const style = styleMatch[1];
+    // Hex colors: #fff, #ffffff
+    if (/#[0-9a-fA-F]{3,8}\b/.test(style)) {
+      errors.push({ line: i + 1, match: styleMatch[0], message: 'Inline hex color; use var(--*)' });
+    }
+    // rgb/rgba/hsl
+    if (/\b(rgb|rgba|hsl|hsla)\s*\(/.test(style)) {
+      errors.push({ line: i + 1, match: styleMatch[0], message: 'Inline color function; use var(--*)' });
+    }
+    // font-size: NNpx (px is forbidden; rem is OK)
+    const fsMatch = style.match(/font-size\s*:\s*([0-9.]+)px\b/i);
+    if (fsMatch) {
+      errors.push({ line: i + 1, match: fsMatch[0], message: 'font-size in px; use var(--fs-*)' });
+    }
+    // padding/margin with px
+    const padMatch = style.match(/(?:padding|margin)(?:-(?:top|right|bottom|left))?\s*:\s*[^;]*\b[0-9.]+px\b/i);
+    if (padMatch) {
+      errors.push({ line: i + 1, match: padMatch[0], message: 'padding/margin in px; use var(--sp-*) or rem' });
+    }
+  });
+  return errors.length ? { errors } : null;
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
