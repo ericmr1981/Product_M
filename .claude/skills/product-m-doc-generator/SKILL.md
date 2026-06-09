@@ -20,6 +20,180 @@ Do NOT use when:
 - The task is changing the design system itself (use the design system files)
 - The project is not the Product M site (the tools will be absent or wrong)
 
+## Content Contract — the MD frontmatter every source file needs
+
+Before you generate HTML, produce (or ask the user for) a **markdown file** following this schema. This is the common format that both humans and the `md-to-html.js` converter understand.
+
+### Required YAML frontmatter
+
+```yaml
+---
+title: "Classic Vanilla"
+series: "gelato"           # gelato | gelato-mix | gelato-shake | null (planning)
+slug: "classic-vanilla"    # lowercase + hyphens; pinyin for Chinese titles
+date: "2026-04-12"
+tags: [signature, vanilla]
+summary: "Single-origin Madagascar vanilla, slow-churned."
+volume: "04"
+hero:
+  eyebrow: "SERIES · GELATO · NO. 01"
+  title: "Classic<br><em>Vanilla</em>"
+  sub: "A study in restraint, in a single pod."
+  meta: "2026 · SPRING"
+---
+```
+
+### Required headings — each H2 maps to one body component
+
+After the frontmatter, the markdown body MUST use **level-2 headings** (`##`) only. Each `##` heading is paired with a component type by a rule keyword in parentheses:
+
+```
+## 01 — INTRODUCTION (intro)
+Lead paragraph text here...
+
+## 02 — SPECIFICATIONS (spec-table)
+| Field | Value |
+|-------|-------|
+| Base  | Madagascar Bourbon |
+| Fat   | 12% min.            |
+
+## 03 — THE POD (split-image)
+![Alt text](/assets/images/hai-yan-li-zhi/img-01.jpg)
+### A heading that introduces the image
+Body text describing what's in the image and why it matters.
+
+## 04 — KEY QUOTE (quote-pull)
+"A memorable line that captures the spirit of the document."
+— Attribution
+
+## 05 — METHOD (steps)
+1. **Split and scrape** — Each pod is split lengthwise...
+2. **Steep** — Cream and pods steep together for 72 hours...
+3. **Churn** — Slow-churned at -2°C...
+
+## 06 — KEY METRICS (stats)
+| number | unit | label |
+|--------|------|-------|
+| 72     | hr   | Steep time |
+| 4      |      | Pods per litre |
+| 0      |      | Artificial anything |
+
+## 07 — GALLERY (gallery)
+![](/assets/images/hai-yan-li-zhi/img-03.jpg)
+![](/assets/images/hai-yan-li-zhi/img-04.jpg)
+```
+
+### Component keyword reference
+
+| Keyword in `( )` | Component | Expected MD content after the heading |
+| --- | --- | --- |
+| `(intro)` | `.intro` | Plain paragraph text |
+| `(spec-table)` | `.spec-section` > `.spec-table` | GFM table (2 columns: key / value) |
+| `(split-image)` | `.split` > `.split-grid` | An image line `![alt](src)` followed by an H3 + paragraph |
+| `(quote-pull)` | `.quote-pull` | A single blockquote `"> ..."` with optional `"— ..."` citation |
+| `(steps)` | `.steps` > `.step-list` | A numbered list (1. 2. 3. …) — each item = one `.step` |
+| `(stats)` | `.stats` | A GFM table with columns `number / unit / label` |
+| `(gallery)` | `.gallery-section` > `.gallery` | 2 or 4 image lines `![](src)` — no text |
+
+The keyword **must** appear in parentheses in the H2. No keyword → `md-to-html.js` skips the section. Other H2 formats (no parens, wrong keyword) are silently ignored.
+
+### Source file placement
+
+Save the markdown file before converting:
+
+```
+sources/<series>/<slug>.md   — product intros
+sources/planning/<slug>.md   — planning docs
+```
+
+Both the MD source and the generated HTML stay in git. The MD is the **content source of truth**; the HTML is the **render artifact**.
+
+## MD → HTML conversion workflow
+
+The recommended path: **LLM writes MD frontmatter → `md-to-html.js` converts to HTML → LLM validates + imports**.  This gives you consistent HTML output without requiring the LLM to memorize 10 component templates.
+
+### Step A: LLM writes the MD file
+
+1. Gather the product details from the user (brief, PPT, specs, photos).
+2. Write the YAML frontmatter (fill in all required fields).
+3. Write the body as H2 sections, each tagged with a component keyword.
+4. Save to `sources/<series>/<slug>.md` (or `sources/planning/<slug>.md`).
+
+### Step B: Convert to HTML
+
+```bash
+node scripts/md-to-html.js --input sources/gelato/classic-vanilla.md --output /tmp/classic-vanilla.html
+```
+
+`md-to-html.js` reads the MD, parses the YAML frontmatter and tagged H2 sections, and produces a complete HTML document by wrapping each section in the correct component template (from `_design-system/components/`). The output is a complete `<!DOCTYPE html>` page ready for validation.
+
+### Step C: Validate + import
+
+Same as the original 5-step workflow: call `validate_doc(html=...)` → fix errors (max 5 retries) → `import_doc(html=..., path=...)` → show diff to user.
+
+### Fallback: LLM writes full HTML
+
+If `md-to-html.js` is unavailable or the content doesn't fit the component-keyword model (e.g. you need a dark hero, a 5-stat row, or a nested layout), fall back to the **manual 5-step workflow** below. Call `get_template(series=...)`, then fill the HTML skeleton by hand using the component snippets from `_design-system/components/`.
+
+## Asset Pipeline — how images get into the site
+
+### Naming rule
+
+All document images live under `assets/images/<slug>/` and follow this naming convention:
+
+```
+assets/images/<slug>/<slug>-01.jpg
+assets/images/<slug>/<slug>-02.jpg
+assets/images/<slug>/<slug>-03.jpg
+assets/images/<slug>/<slug>-04.jpg
+```
+
+Example for slug `hai-yan-li-zhi-mang-mang`:
+```
+assets/images/hai-yan-li-zhi-mang-mang/hai-yan-li-zhi-mang-mang-01.jpg
+assets/images/hai-yan-li-zhi-mang-mang/hai-yan-li-zhi-mang-mang-02.jpg
+...
+```
+
+Use `-01`, `-02` etc. (zero-padded, 2 digits). The `gallery` component expects 2 or 4 images from this directory.
+
+### Who does what
+
+| Step | Who | Tool |
+| --- | --- | --- |
+| Take/select product photos | Human | (camera / design tool) |
+| Rename images to `<slug>-NN.jpg` | Human or LLM | `mv` / Finder |
+| Copy images into the project | Human or LLM | `scripts/upload-images.js` (see below) |
+| Reference images in MD/HTML | LLM | `[](/assets/images/<slug>/<slug>-01.jpg)` |
+| Validate file exists | LLM | `validate_doc` (image path check) |
+
+### Batch upload script
+
+```bash
+# Upload a single image
+node scripts/upload-images.js --source ~/Desktop/shot1.jpg --target assets/images/hai-yan-li-zhi-mang-mang/hai-yan-li-zhi-mang-mang-01.jpg
+
+# Batch rename + upload a directory
+node scripts/upload-images.js --batch ~/Desktop/product-shots/ --target assets/images/hai-yan-li-zhi-mang-mang/ --slug hai-yan-li-zhi-mang-mang
+```
+
+The batch mode renames all `.jpg`/`.png` files in the source directory to `<slug>-01.jpg`, `<slug>-02.jpg`, etc. (sorted by filename) and copies them to the target directory. It skips non-image files and returns:
+
+```json
+{
+  "uploaded": [
+    {"source": "/Users/.../shot1.jpg", "target": "assets/images/hai-yan-li-zhi-mang-mang/hai-yan-li-zhi-mang-mang-01.jpg"},
+    ...
+  ],
+  "skipped": ["image.docx"],
+  "errors": []
+}
+```
+
+### After uploading
+
+Re-run `validate_doc` — the `no-external-resources` rule checks image paths start with `/assets/`, and the verification step checks the files actually exist on disk. If images are missing, the validate step will warn.
+
 ## The 4 MCP tools
 
 The Product M MCP server exposes 4 tools. Assume they are available; if a tool call returns "tool not found" or a connection error, fall back to the CLI equivalents at the bottom of this skill.
@@ -31,7 +205,7 @@ The Product M MCP server exposes 4 tools. Assume they are available; if a tool c
 | `validate_doc` | Run 7 SPEC rules against an HTML string |
 | `import_doc` | Validate + write + rebuild index + return git diff (does NOT auto-commit) |
 
-## 5-step workflow
+## 5-step workflow (manual HTML mode — use when md-to-html.js is unavailable)
 
 ### Step 1: Read the design spec
 
@@ -128,6 +302,13 @@ If the MCP server isn't running or the tools aren't available, use the CLI direc
 npm run validate -- --file <path>
 cat draft.html | npm run validate -- --stdin
 
+# Convert MD to HTML
+node scripts/md-to-html.js --input <source.md> --output <output.html>
+
+# Upload images
+node scripts/upload-images.js --source <local-file> --target <repo-relative-path>
+node scripts/upload-images.js --batch <local-dir> --target <repo-relative-dir> --slug <slug>
+
 # Import a draft
 npm run import -- <source-html> <target-relative-path>
 # Example:
@@ -146,6 +327,8 @@ When you finish, report:
 3. **The `git_diff_summary`** (so they see what changed)
 4. **A single sentence** asking them to review and commit
 
+If you took the MD → HTML path, also report the source MD path.
+
 Do NOT:
 - Commit anything yourself
 - Modify the design system
@@ -162,27 +345,23 @@ Do NOT:
 | `mcp/README.md` | How to wire MCP into Claude |
 | `scripts/validate.js` | 7-rule validator |
 | `scripts/import.js` | Validate + write + rebuild index |
+| `scripts/md-to-html.js` | MD (with tagged H2 sections) → HTML |
+| `scripts/upload-images.js` | Copy + rename images into `assets/images/` |
 | `scripts/mcp-server.js` | JSON-RPC server (4 tools) |
 | `package.json` | `validate` / `import` / `mcp` / `build-index` scripts |
 
-## Example: turn a brief into a doc
+## Example: turn a brief into a doc (MD → HTML path)
 
 User says: "Make a product doc for 海盐荔枝芒芒 based on the launch brief."
 
-1. `get_template(series="gelato-shake")` → skeleton
-2. Fill in:
-   - `title`: 海盐荔枝芒芒
-   - `summary`: 蓝黄撞色双层夏日特调...
-   - hero: eyebrow "SERIES · GELATO SHAKE · SUMMER 2026", title "海盐荔枝芒芒", sub "蓝黄撞色 · gelato 工艺打制"
-   - stats: ¥28 / ¥6.70 / 76.1% / 3000
-   - spec-section: positioning table
-   - split: real-layer image + text
-   - quote-pull: "吸管插到底..."
-   - steps: 5-step SOP
-   - spec-section: visual system comparison
-   - quote-pull: master slogan
-   - gallery: 4 product images from `/assets/images/hai-yan-li-zhi/`
-   - footer-card
-3. `validate_doc(html=<>)` → if errors, fix
-4. `import_doc(html=<>, path="docs/gelato-shake/海盐荔枝芒芒.html")` → returns git diff
-5. Report to user: "File written. Diff: <summary>. Please review and commit."
+1. Collect info from the user (price, specs, photos, copy).
+2. Write the MD source file:
+   - YAML frontmatter with title/series/slug/date/hero
+   - H2 sections tagged with component keywords
+   - Image references use the `<slug>-NN.jpg` naming convention
+   - Save to `sources/gelato-shake/hai-yan-li-zhi-mang-mang.md`
+3. (If images are on the user's desktop) Run `upload-images.js --batch ~/Desktop/shots/ --target assets/images/hai-yan-li-zhi-mang-mang/ --slug hai-yan-li-zhi-mang-mang`
+4. `node scripts/md-to-html.js --input <md> --output /tmp/draft.html`
+5. `validate_doc(html=...)` → if errors, fix (max 5 retries)
+6. `import_doc(html=..., path="docs/gelato-shake/hai-yan-li-zhi-mang-mang.html")` → returns git diff
+7. Report to user: "MD saved to `sources/...`, HTML imported. Diff: <summary>. Images uploaded: 4. Please review and commit."
