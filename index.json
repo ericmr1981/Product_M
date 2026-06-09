@@ -1,0 +1,65 @@
+{
+  "generated": "2026-06-09T08:11:24.828Z",
+  "documents": [
+    {
+      "title": "2026 Summer Launch",
+      "path": "planning/2026-summer-launch.html",
+      "series": null,
+      "slug": "2026-summer-launch",
+      "date": "2026-05-20",
+      "tags": [
+        "planning",
+        "campaign",
+        "summer-2026"
+      ],
+      "summary": "Three new SKU launches across all series, June through August.",
+      "volume": "04"
+    },
+    {
+      "title": "Mocha Shake",
+      "path": "docs/gelato-shake/mocha-shake.html",
+      "series": "gelato-shake",
+      "slug": "mocha-shake",
+      "date": "2026-05-03",
+      "tags": [
+        "coffee",
+        "signature"
+      ],
+      "summary": "Double-shot Yirgacheffe shaken with a vanilla bean base.",
+      "volume": "04"
+    },
+    {
+      "title": "Classic Vanilla",
+      "path": "docs/gelato/classic-vanilla.html",
+      "series": "gelato",
+      "slug": "classic-vanilla",
+      "date": "2026-04-12",
+      "tags": [
+        "signature",
+        "vanilla"
+      ],
+      "summary": "Single-origin Madagascar Bourbon vanilla, slow-churned for 48 hours.",
+      "volume": "04"
+    }
+  ],
+  "series": [
+    {
+      "slug": "gelato",
+      "name": "Gelato",
+      "description": "The original — slow-churned, low-air, intense.",
+      "count": 1
+    },
+    {
+      "slug": "gelato-mix",
+      "name": "Gelato Mix",
+      "description": "Layered compositions, balanced sweet and bright.",
+      "count": 0
+    },
+    {
+      "slug": "gelato-shake",
+      "name": "Gelato Shake",
+      "description": "Spoon-thick shakes, made to order.",
+      "count": 1
+    }
+  ]
+}
