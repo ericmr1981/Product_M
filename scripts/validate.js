@@ -128,6 +128,41 @@ rule('no-centered-headings', (html) => {
   return errors.length ? { errors } : null;
 });
 
+// ----- Rule: no-external-resources -----
+rule('no-external-resources', (html) => {
+  const errors = [];
+  const lines = html.split('\n');
+  lines.forEach((line, i) => {
+    // <link rel="stylesheet" href="...">
+    const linkM = line.match(/<link[^>]+rel=["']stylesheet["'][^>]+href=["']([^"']+)["']/i);
+    if (linkM) {
+      const href = linkM[1];
+      if (!href.startsWith('/styles/') && !href.startsWith('./styles/') && !href.startsWith('../styles/')) {
+        errors.push({ line: i + 1, match: href, message: 'External CSS not allowed; use /styles/ paths' });
+      }
+    }
+    // <script src="...">
+    const scriptM = line.match(/<script[^>]+src=["']([^"']+)["']/i);
+    if (scriptM) {
+      const src = scriptM[1];
+      if (!src.startsWith('/') && !src.startsWith('./')) {
+        errors.push({ line: i + 1, match: src, message: 'External <script> not allowed' });
+      }
+    }
+    // <img src="..."> — must start with /assets/
+    const imgM = line.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (imgM) {
+      const src = imgM[1];
+      if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+        errors.push({ line: i + 1, match: src, message: 'External <img> not allowed; copy images to /assets/' });
+      } else if (!src.startsWith('/assets/') && !src.startsWith('./assets/') && !src.startsWith('../assets/')) {
+        errors.push({ line: i + 1, match: src, message: 'Image path must start with /assets/' });
+      }
+    }
+  });
+  return errors.length ? { errors } : null;
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
