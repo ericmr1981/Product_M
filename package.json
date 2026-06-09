@@ -1,0 +1,12 @@
+{
+  "name": "product-m",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Product M brand site — static editorial site for product documentation",
+  "scripts": {
+    "build-index": "node scripts/build-index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
