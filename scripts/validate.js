@@ -40,6 +40,25 @@ rule('frontmatter-presence', (html) => {
   return { errors };
 });
 
+// ----- Rule: series-slug -----
+rule('series-slug', (html) => {
+  const match = html.match(/<!--\s*@meta\s*(\{[\s\S]*?\})\s*-->/);
+  if (!match) return null;
+  let meta;
+  try { meta = JSON.parse(match[1]); } catch { return null; }
+  if (meta.series === undefined) return null;
+  const valid = ['gelato', 'gelato-mix', 'gelato-shake', null];
+  if (!valid.includes(meta.series)) {
+    return {
+      errors: [{
+        value: meta.series,
+        message: `Must be one of: gelato, gelato-mix, gelato-shake, null (got ${JSON.stringify(meta.series)})`,
+      }],
+    };
+  }
+  return null;
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
