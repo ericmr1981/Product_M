@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <rect width="800" height="600" fill="#d8d3c4"/>
+  <g fill="#1f3a2e" font-family="Georgia, serif" text-anchor="middle">
+    <text x="400" y="300" font-size="32" font-style="italic">placeholder 02</text>
+    <text x="400" y="340" font-size="14" font-family="monospace" letter-spacing="2">800 × 600</text>
+  </g>
+</svg>
