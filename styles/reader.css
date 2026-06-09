@@ -184,3 +184,45 @@ section { margin-bottom: var(--sp-16); }
 @media (max-width: 720px) {
   .intro-lead { font-size: var(--fs-lg); }
 }
+
+/* =========================================================================
+   4. spec-table
+   ========================================================================= */
+.spec-section { margin-bottom: var(--sp-16); }
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+}
+
+.spec-table tr {
+  border-bottom: 1px solid var(--rule);
+}
+
+.spec-table tr:first-child {
+  border-top: 1px solid var(--ink);
+}
+
+.spec-table th,
+.spec-table td {
+  text-align: left;
+  padding: var(--sp-4) 0;
+  vertical-align: top;
+}
+
+.spec-table th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  width: 35%;
+  padding-right: var(--sp-6);
+}
+
+.spec-table td {
+  font-size: var(--fs-md);
+  color: var(--ink);
+}
