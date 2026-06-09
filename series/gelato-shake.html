@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gelato Shake — Product M</title>
+  <link rel="stylesheet" href="/styles/site.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="/" class="site-nav-brand">Product M</a>
+    <ul class="site-nav-links">
+      <li><a href="/">首页</a></li>
+      <li><a href="/series/gelato.html">Gelato</a></li>
+      <li><a href="/series/gelato-mix.html">Gelato Mix</a></li>
+      <li><a href="/series/gelato-shake.html">Gelato Shake</a></li>
+      <li><a href="/planning/">企划</a></li>
+    </ul>
+    <div class="site-nav-meta">VOL. 04 · 2026</div>
+  </nav>
+
+  <div class="site">
+    <header class="series-hero">
+      <p class="series-hero-eyebrow">SERIES · 03</p>
+      <h1 class="series-hero-title">Gelato Shake</h1>
+      <p class="series-hero-desc">Spoon-thick shakes, made to order.</p>
+      <p class="series-hero-count" id="gelato-shake-count">— documents</p>
+    </header>
+
+    <div class="doc-grid" id="gelato-shake-docs">
+      <p class="empty-state">Loading…</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <span>Product M</span>
+    <span>© 2026 — All rights reserved</span>
+  </footer>
+
+  <script>
+    fetch('/index.json')
+      .then((r) => r.json())
+      .then((data) => {
+        const docs = data.documents.filter((d) => d.series === 'gelato-shake');
+        document.getElementById('gelato-shake-count').textContent = `${docs.length} document${docs.length === 1 ? '' : 's'}`;
+        const grid = document.getElementById('gelato-shake-docs');
+        if (docs.length === 0) {
+          grid.innerHTML = '<p class="empty-state">No documents yet for this series.</p>';
+          return;
+        }
+        grid.innerHTML = docs
+          .map(
+            (d) => `
+            <a class="doc-card" href="/${d.path}">
+              <span class="doc-card-date">${d.date}</span>
+              <h2 class="doc-card-title">${d.title}</h2>
+              <p class="doc-card-summary">${d.summary || ''}</p>
+            </a>
+          `
+          )
+          .join('');
+      });
+  </script>
+</body>
+</html>
