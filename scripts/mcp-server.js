@@ -27,7 +27,7 @@ const { URL } = require('url');
 
 const ROOT = path.resolve(__dirname, '..');
 const PORT = parseInt(process.env.PRODUCT_M_MCP_PORT || '7331', 10);
-const HOST = '127.0.0.1';
+const HOST = '0.0.0.0';
 const VERSION = '0.1.0';
 
 const TOOLS = [
