@@ -59,6 +59,28 @@ rule('series-slug', (html) => {
   return null;
 });
 
+// ----- Rule: required-components -----
+rule('required-components', (html) => {
+  const required = ['nav-bar', 'hero', 'footer-card'];
+  const optional = ['intro', 'spec-section', 'split', 'quote-pull', 'steps', 'stats', 'gallery-section'];
+  const missing = [];
+  for (const cls of required) {
+    if (!html.includes(`class="${cls}"`) && !html.includes(`class="${cls} `) && !html.includes(` ${cls}"`) && !html.includes(` ${cls} `)) {
+      missing.push(cls);
+    }
+  }
+  const presentOptional = optional.filter((c) =>
+    html.includes(`class="${c}"`) || html.includes(`class="${c} `) || html.includes(` ${c}"`) || html.includes(` ${c} `)
+  );
+  if (presentOptional.length < 3) {
+    missing.push(`at least 3 body components from [${optional.join(', ')}], found ${presentOptional.length}`);
+  }
+  if (missing.length) {
+    return { errors: [{ missing, message: 'Required components missing' }] };
+  }
+  return null;
+});
+
 function rule(name, check) {
   RULES.push({ name, check });
 }
