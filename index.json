@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-09T09:09:26.488Z",
+  "generated": "2026-06-09T16:38:43.168Z",
   "documents": [
     {
       "title": "海盐荔枝芒芒",
@@ -59,6 +59,19 @@
     },
     {
       "title": "Classic Vanilla",
+      "path": "docs/gelato/_e2e-test.html",
+      "series": "gelato",
+      "slug": "classic-vanilla",
+      "date": "2026-04-12",
+      "tags": [
+        "signature",
+        "vanilla"
+      ],
+      "summary": "Single-origin Madagascar Bourbon vanilla, slow-churned for 48 hours.",
+      "volume": "04"
+    },
+    {
+      "title": "Classic Vanilla",
       "path": "docs/gelato/classic-vanilla.html",
       "series": "gelato",
       "slug": "classic-vanilla",
@@ -76,7 +89,7 @@
       "slug": "gelato",
       "name": "Gelato",
       "description": "The original — slow-churned, low-air, intense.",
-      "count": 1
+      "count": 2
     },
     {
       "slug": "gelato-mix",

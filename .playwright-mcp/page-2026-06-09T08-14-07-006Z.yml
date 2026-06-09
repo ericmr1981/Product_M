@@ -1,0 +1,85 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - link "Product M" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "首页" [ref=e7] [cursor=pointer]:
+          - /url: /
+      - listitem [ref=e8]:
+        - link "Gelato" [ref=e9] [cursor=pointer]:
+          - /url: /series/gelato.html
+      - listitem [ref=e10]:
+        - link "Gelato Mix" [ref=e11] [cursor=pointer]:
+          - /url: /series/gelato-mix.html
+      - listitem [ref=e12]:
+        - link "Gelato Shake" [ref=e13] [cursor=pointer]:
+          - /url: /series/gelato-shake.html
+      - listitem [ref=e14]:
+        - link "企划" [ref=e15] [cursor=pointer]:
+          - /url: /planning/
+    - generic [ref=e16]: VOL. 04 · 2026
+  - banner [ref=e17]:
+    - generic [ref=e18]: SERIES · GELATO SHAKE · NO. 01
+    - heading "Mocha Shake" [level=1] [ref=e19]:
+      - text: Mocha
+      - emphasis [ref=e20]: Shake
+    - paragraph [ref=e22]: A shake that tastes like the espresso it was made from.
+    - generic [ref=e23]: 2026 · SPRING
+  - generic [ref=e24]:
+    - paragraph [ref=e25]: 01 — INTRODUCTION
+    - paragraph [ref=e26]: Most chocolate shakes are sweet. Most coffee shakes are bitter. This one is neither — it is a meeting point.
+  - generic [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e29]: 2×
+      - generic [ref=e30]: Espresso shots
+    - generic [ref=e31]:
+      - generic [ref=e32]: 180ml
+      - generic [ref=e33]: Cold milk
+    - generic [ref=e34]:
+      - generic [ref=e35]: 15s
+      - generic [ref=e36]: Shake time
+  - generic [ref=e37]:
+    - paragraph [ref=e38]: 02 — SPECIFICATIONS
+    - table [ref=e39]:
+      - rowgroup [ref=e40]:
+        - row "Espresso Yirgacheffe, double shot, 36g" [ref=e41]:
+          - rowheader "Espresso" [ref=e42]
+          - cell "Yirgacheffe, double shot, 36g" [ref=e43]
+        - row "Cocoa 70% single-origin, Venezuela" [ref=e44]:
+          - rowheader "Cocoa" [ref=e45]
+          - cell "70% single-origin, Venezuela" [ref=e46]
+        - row "Base Madagascar vanilla gelato" [ref=e47]:
+          - rowheader "Base" [ref=e48]
+          - cell "Madagascar vanilla gelato" [ref=e49]
+        - row "Milk Whole, cold, 4°C" [ref=e50]:
+          - rowheader "Milk" [ref=e51]
+          - cell "Whole, cold, 4°C" [ref=e52]
+        - row "Shake 15 sec, hand-shaken" [ref=e53]:
+          - rowheader "Shake" [ref=e54]
+          - cell "15 sec, hand-shaken" [ref=e55]
+        - row "Glass Pre-chilled, 12 oz" [ref=e56]:
+          - rowheader "Glass" [ref=e57]
+          - cell "Pre-chilled, 12 oz" [ref=e58]
+  - blockquote [ref=e59]:
+    - paragraph [ref=e60]: "\"The shake should be pourable, not spoonable. If you can stand a straw in it, you've over-churned.\""
+    - text: — Bar lead, 2024
+  - generic [ref=e61]:
+    - paragraph [ref=e62]: 03 — THE POUR
+    - generic [ref=e63]:
+      - figure [ref=e64]:
+        - img "Mocha shake being poured into a chilled glass" [ref=e65]
+      - generic [ref=e66]:
+        - heading "Thick enough to lean" [level=2] [ref=e67]
+        - paragraph [ref=e68]: We shake by hand for fifteen seconds — long enough to emulsify the espresso oils into the cream, short enough to keep the body pourable. A proper mocha shake leans in the glass rather than running flat.
+  - paragraph [ref=e70]: 04 — VARIATIONS
+  - complementary [ref=e72]:
+    - generic [ref=e73]:
+      - generic [ref=e74]: Series
+      - generic [ref=e75]: Gelato Shake
+    - generic [ref=e76]:
+      - generic [ref=e77]: Published
+      - generic [ref=e78]: 2026-05-03
+    - generic [ref=e79]:
+      - generic [ref=e80]: Volume
+      - generic [ref=e81]: "04"

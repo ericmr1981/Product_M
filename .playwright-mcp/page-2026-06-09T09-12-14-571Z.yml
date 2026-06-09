@@ -1,0 +1,257 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - link "Product M" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - list [ref=e5]:
+      - listitem [ref=e6]:
+        - link "首页" [ref=e7] [cursor=pointer]:
+          - /url: /
+      - listitem [ref=e8]:
+        - link "Gelato" [ref=e9] [cursor=pointer]:
+          - /url: /series/gelato.html
+      - listitem [ref=e10]:
+        - link "Gelato Mix" [ref=e11] [cursor=pointer]:
+          - /url: /series/gelato-mix.html
+      - listitem [ref=e12]:
+        - link "Gelato Shake" [ref=e13] [cursor=pointer]:
+          - /url: /series/gelato-shake.html
+      - listitem [ref=e14]:
+        - link "企划" [ref=e15] [cursor=pointer]:
+          - /url: /planning/
+    - generic [ref=e16]: VOL. 04 · 2026
+  - banner [ref=e17]:
+    - generic [ref=e18]: PLANNING · LAUNCH · SUMMER 2026
+    - heading "海盐荔枝芒芒 上市企划" [level=1] [ref=e19]:
+      - text: 海盐荔枝芒芒
+      - emphasis [ref=e20]: 上市企划
+    - paragraph [ref=e22]: 7 月 1 日首发 · 全平台同步上线
+    - generic [ref=e23]: Issued 2026-06-09
+  - generic [ref=e24]:
+    - paragraph [ref=e25]: 01 — BRIEF
+    - paragraph [ref=e26]: 这是一份从决策摘要到 4 周执行日历的完整上市企划，覆盖市场机会、营销策略、定价、风险与实施时间线。
+  - generic [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e29]: 07-01
+      - generic [ref=e30]: 首发日
+    - generic [ref=e31]:
+      - generic [ref=e32]: ¥28
+      - generic [ref=e33]: 零售价
+    - generic [ref=e34]:
+      - generic [ref=e35]: 76.1%
+      - generic [ref=e36]: 毛利率
+    - generic [ref=e37]:
+      - generic [ref=e38]: 3000杯
+      - generic [ref=e39]: 首月目标
+  - generic [ref=e40]:
+    - paragraph [ref=e41]: 02 — MARKET OPPORTUNITY
+    - table [ref=e42]:
+      - rowgroup [ref=e43]:
+        - row "① 赛道高增长 小红书 2026 Q2「夏日特调」笔记同比 +187%（远超「奶茶新品」+45%）" [ref=e44]:
+          - rowheader "① 赛道高增长" [ref=e45]
+          - cell "小红书 2026 Q2「夏日特调」笔记同比 +187%（远超「奶茶新品」+45%）" [ref=e46]
+        - row "② 撞色持续火 多巴胺配色（互补色撞色）仍是爆款主旋律；蓝黄撞色 = 2026 春夏 Pantone 流行色" [ref=e47]:
+          - rowheader "② 撞色持续火" [ref=e48]
+          - cell "多巴胺配色（互补色撞色）仍是爆款主旋律；蓝黄撞色 = 2026 春夏 Pantone 流行色" [ref=e49]
+        - row "③ 差异化独家 「北海道 + 荔枝味 gelato 球打奶昔」是当前空白品类" [ref=e50]:
+          - rowheader "③ 差异化独家" [ref=e51]
+          - cell "「北海道 + 荔枝味 gelato 球打奶昔」是当前空白品类" [ref=e52]
+  - generic [ref=e53]:
+    - paragraph [ref=e54]: 03 — LAUNCH RHYTHM
+    - list [ref=e55]:
+      - listitem [ref=e56]:
+        - generic [ref=e57]: "01"
+        - generic [ref=e58]:
+          - heading "预热期 (06-25 ~ 06-30)" [level=3] [ref=e59]
+          - paragraph [ref=e60]: 尾部达人种草 + 信息流预约，以悬念海报与试喝内容铺垫首发热度。
+      - listitem [ref=e61]:
+        - generic [ref=e62]: "02"
+        - generic [ref=e63]:
+          - heading "首发日 (07-01)" [level=3] [ref=e64]
+          - paragraph [ref=e65]: 门店活动启动，全平台同步上线，KOL 集中发布打响声量。
+      - listitem [ref=e66]:
+        - generic [ref=e67]: "03"
+        - generic [ref=e68]:
+          - heading "爆发期 (07-01 ~ 07-07)" [level=3] [ref=e69]
+          - paragraph [ref=e70]: 45-70 位达人集中发布，覆盖头部、腰部、尾部三层矩阵。
+      - listitem [ref=e71]:
+        - generic [ref=e72]: "04"
+        - generic [ref=e73]:
+          - heading "长尾期 (07-08 ~ 07-31)" [level=3] [ref=e74]
+          - paragraph [ref=e75]: 复购钩子 + 节日营销（含 07-20 高温日、七夕节点）延续话题热度。
+  - generic [ref=e76]:
+    - paragraph [ref=e77]: 04 — CHANNELS & PROMOTIONS
+    - table [ref=e78]:
+      - rowgroup [ref=e79]:
+        - row "渠道 · 小红书 主阵地，KOL 笔记 + 信息流 + 品牌账号自播" [ref=e80]:
+          - rowheader "渠道 · 小红书" [ref=e81]
+          - cell "主阵地，KOL 笔记 + 信息流 + 品牌账号自播" [ref=e82]
+        - row "渠道 · 抖音 短视频 + 直播，话题挑战赛「挂壁慢镜头」" [ref=e83]:
+          - rowheader "渠道 · 抖音" [ref=e84]
+          - cell "短视频 + 直播，话题挑战赛「挂壁慢镜头」" [ref=e85]
+        - row "渠道 · 视频号 转发裂变 + 公众号图文长内容" [ref=e86]:
+          - rowheader "渠道 · 视频号" [ref=e87]
+          - cell "转发裂变 + 公众号图文长内容" [ref=e88]
+        - row "渠道 · 美团 门店主图 + 首发新品标签 + 满减券" [ref=e89]:
+          - rowheader "渠道 · 美团" [ref=e90]
+          - cell "门店主图 + 首发新品标签 + 满减券" [ref=e91]
+        - row "渠道 · 饿了么 限时首发 + 第二杯半价 + 平台首页推荐位争取" [ref=e92]:
+          - rowheader "渠道 · 饿了么" [ref=e93]
+          - cell "限时首发 + 第二杯半价 + 平台首页推荐位争取" [ref=e94]
+        - row "渠道 · 大众点评 「夏日必喝」榜单投稿 + 评价引导" [ref=e95]:
+          - rowheader "渠道 · 大众点评" [ref=e96]
+          - cell "「夏日必喝」榜单投稿 + 评价引导" [ref=e97]
+        - row "促销 · 首发 7 天 第二杯半价（07-01 ~ 07-07）" [ref=e98]:
+          - rowheader "促销 · 首发 7 天" [ref=e99]
+          - cell "第二杯半价（07-01 ~ 07-07）" [ref=e100]
+        - row "促销 · 工艺种草 带定位 + 「gelato 工艺」立减 5 元" [ref=e101]:
+          - rowheader "促销 · 工艺种草" [ref=e102]
+          - cell "带定位 + 「gelato 工艺」立减 5 元" [ref=e103]
+        - row "促销 · 老带新 老客邀请新客各赠 mini gelato 球 1 颗" [ref=e104]:
+          - rowheader "促销 · 老带新" [ref=e105]
+          - cell "老客邀请新客各赠 mini gelato 球 1 颗" [ref=e106]
+        - row "促销 · 集杯 集 5 杯免费升杯 + 加料（芒果肉 / 荔枝肉）" [ref=e107]:
+          - rowheader "促销 · 集杯" [ref=e108]
+          - cell "集 5 杯免费升杯 + 加料（芒果肉 / 荔枝肉）" [ref=e109]
+        - row "促销 · 高温日 07-20 起高温日专属海报 + 短信召回" [ref=e110]:
+          - rowheader "促销 · 高温日" [ref=e111]
+          - cell "07-20 起高温日专属海报 + 短信召回" [ref=e112]
+  - generic [ref=e113]:
+    - paragraph [ref=e114]: 05 — COST BREAKDOWN (500ml 中杯)
+    - table [ref=e115]:
+      - rowgroup [ref=e116]:
+        - row "北海道 gelato 90g 2.08 元" [ref=e117]:
+          - rowheader "北海道 gelato 90g" [ref=e118]
+          - cell "2.08 元" [ref=e119]
+        - row "冷冻芒果酱 50g 1.89 元" [ref=e120]:
+          - rowheader "冷冻芒果酱 50g" [ref=e121]
+          - cell "1.89 元" [ref=e122]
+        - row "荔枝味 gelato 50g 1.15 元" [ref=e123]:
+          - rowheader "荔枝味 gelato 50g" [ref=e124]
+          - cell "1.15 元" [ref=e125]
+        - row "纯牛奶 90g 1.08 元" [ref=e126]:
+          - rowheader "纯牛奶 90g" [ref=e127]
+          - cell "1.08 元" [ref=e128]
+        - row "杯子（含盖 / 吸管 / 勺） 0.50 元" [ref=e129]:
+          - rowheader "杯子（含盖 / 吸管 / 勺）" [ref=e130]
+          - cell "0.50 元" [ref=e131]
+        - row "原料合计 6.70 元" [ref=e132]:
+          - rowheader "原料合计" [ref=e133]
+          - cell "6.70 元" [ref=e134]
+  - generic [ref=e135]:
+    - generic [ref=e136]:
+      - generic [ref=e137]: 23.9%
+      - generic [ref=e138]: 原料成本占比
+    - generic [ref=e139]:
+      - generic [ref=e140]: 76.1%
+      - generic [ref=e141]: 毛利率
+    - generic [ref=e142]:
+      - generic [ref=e143]: ¥63,900
+      - generic [ref=e144]: 毛利 / 首月
+  - generic [ref=e145]:
+    - paragraph [ref=e146]: 06 — RISK & MITIGATION
+    - table [ref=e147]:
+      - rowgroup [ref=e148]:
+        - row "工艺风险 分层易塌 / 挂壁不足。应对：备 2 周北海道+荔枝味 gelato 库存 + 严格 SOP + 首周每日监控出杯质量" [ref=e149]:
+          - rowheader "工艺风险" [ref=e150]
+          - cell "分层易塌 / 挂壁不足。应对：备 2 周北海道+荔枝味 gelato 库存 + 严格 SOP + 首周每日监控出杯质量" [ref=e151]
+        - row "营销风险 「奶昔」标签降低溢价感。应对：实拍图统一 brief + 工艺对比图卡（成本 6.70 强溢价支撑）" [ref=e152]:
+          - rowheader "营销风险" [ref=e153]
+          - cell "「奶昔」标签降低溢价感。应对：实拍图统一 brief + 工艺对比图卡（成本 6.70 强溢价支撑）" [ref=e154]
+        - row "合规风险 「北海道」「gelato 球」需可溯源。应对：实际确为北海道 + 荔枝味 gelato 球打制 + 配料表如实标注" [ref=e155]:
+          - rowheader "合规风险" [ref=e156]
+          - cell "「北海道」「gelato 球」需可溯源。应对：实际确为北海道 + 荔枝味 gelato 球打制 + 配料表如实标注" [ref=e157]
+  - generic [ref=e158]:
+    - paragraph [ref=e159]: 07 — KOL MATRIX
+    - table [ref=e160]:
+      - rowgroup [ref=e161]:
+        - row "头部 (>50万粉) 2-3 位 / ¥8,000-15,000 / 话题引爆" [ref=e162]:
+          - rowheader "头部 (>50万粉)" [ref=e163]
+          - cell "2-3 位 / ¥8,000-15,000 / 话题引爆" [ref=e164]
+        - row "腰部 (10-50万) 10-15 位 / ¥2,000-5,000 / 种草深度" [ref=e165]:
+          - rowheader "腰部 (10-50万)" [ref=e166]
+          - cell "10-15 位 / ¥2,000-5,000 / 种草深度" [ref=e167]
+        - row "尾部 / 素人 (<10万) 30-50 位 / ¥300-1,000 / UGC 沉淀" [ref=e168]:
+          - rowheader "尾部 / 素人 (<10万)" [ref=e169]
+          - cell "30-50 位 / ¥300-1,000 / UGC 沉淀" [ref=e170]
+        - row "合计 45-70 位 / ¥3-5 万" [ref=e171]:
+          - rowheader "合计" [ref=e172]
+          - cell "45-70 位 / ¥3-5 万" [ref=e173]
+  - generic [ref=e174]:
+    - paragraph [ref=e175]: 08 — 4-WEEK CONTENT CALENDAR (06-25 ~ 07-22)
+    - table [ref=e176]:
+      - rowgroup [ref=e177]:
+        - row "W0 预热 · 06-25 官方悬念海报" [ref=e178]:
+          - rowheader "W0 预热 · 06-25" [ref=e179]
+          - cell "官方悬念海报" [ref=e180]
+        - row "W0 预热 · 06-28 尾部达人 UGC 试喝 ×10" [ref=e181]:
+          - rowheader "W0 预热 · 06-28" [ref=e182]
+          - cell "尾部达人 UGC 试喝 ×10" [ref=e183]
+        - row "W1 爆发 · 07-01 头部 + 腰部集中发布 ×15" [ref=e184]:
+          - rowheader "W1 爆发 · 07-01" [ref=e185]
+          - cell "头部 + 腰部集中发布 ×15" [ref=e186]
+        - row "W1 爆发 · 07-03 UGC 接力 ×20" [ref=e187]:
+          - rowheader "W1 爆发 · 07-03" [ref=e188]
+          - cell "UGC 接力 ×20" [ref=e189]
+        - row "W1 爆发 · 07-05 「挂壁慢镜头」话题挑战赛" [ref=e190]:
+          - rowheader "W1 爆发 · 07-05" [ref=e191]
+          - cell "「挂壁慢镜头」话题挑战赛" [ref=e192]
+        - row "W2 长尾 · 07-08 复购钩子内容 ×5" [ref=e193]:
+          - rowheader "W2 长尾 · 07-08" [ref=e194]
+          - cell "复购钩子内容 ×5" [ref=e195]
+        - row "W2 长尾 · 07-12 「工艺对比」科普 ×5" [ref=e196]:
+          - rowheader "W2 长尾 · 07-12" [ref=e197]
+          - cell "「工艺对比」科普 ×5" [ref=e198]
+        - row "W3 节日 · 07-20 高温日海报 + 七夕预告 ×10" [ref=e199]:
+          - rowheader "W3 节日 · 07-20" [ref=e200]
+          - cell "高温日海报 + 七夕预告 ×10" [ref=e201]
+  - generic [ref=e202]:
+    - paragraph [ref=e203]: 09 — EXECUTION TIMELINE
+    - list [ref=e204]:
+      - listitem [ref=e205]:
+        - generic [ref=e206]: "01"
+        - generic [ref=e207]:
+          - heading "06-09 企划书定稿 v0.6 (Ella)" [level=3] [ref=e208]
+          - paragraph [ref=e209]: 本份企划书定稿，跨部门分发（产品 / 营运 / 营销 / 财务）。
+      - listitem [ref=e210]:
+        - generic [ref=e211]: "02"
+        - generic [ref=e212]:
+          - heading "06-10 ~ 06-15 配方试做 + 口味验证" [level=3] [ref=e213]
+          - paragraph [ref=e214]: 门店小批量试做，组织内部盲测 + 口味定型确认。
+      - listitem [ref=e215]:
+        - generic [ref=e216]: "03"
+        - generic [ref=e217]:
+          - heading "06-16 ~ 06-20 SOP 制定 + 门店培训" [level=3] [ref=e218]
+          - paragraph [ref=e219]: 出杯 SOP 文档化，全员培训覆盖（含预冷、打制、装饰、出杯四步）。
+      - listitem [ref=e220]:
+        - generic [ref=e221]: "04"
+        - generic [ref=e222]:
+          - heading "06-21 ~ 06-24 物料制作" [level=3] [ref=e223]
+          - paragraph [ref=e224]: POP 海报、桌卡、价签、外卖主图、平台详情页物料就位。
+      - listitem [ref=e225]:
+        - generic [ref=e226]: "05"
+        - generic [ref=e227]:
+          - heading "06-25 ~ 06-30 达人种草预热" [level=3] [ref=e228]
+          - paragraph [ref=e229]: 尾部达人试喝 + 官方悬念海报释放，预约首发流量。
+      - listitem [ref=e230]:
+        - generic [ref=e231]: "06"
+        - generic [ref=e232]:
+          - heading "07-01 首发上市" [level=3] [ref=e233]
+          - paragraph [ref=e234]: 门店活动 + 全平台同步上线，KOL 集中发布。
+      - listitem [ref=e235]:
+        - generic [ref=e236]: "07"
+        - generic [ref=e237]:
+          - heading "07-08 ~ 07-15 数据复盘 + 优化" [level=3] [ref=e238]
+          - paragraph [ref=e239]: 首周销量、客单、复购、口碑数据复盘，调整后续节奏。
+  - blockquote [ref=e240]:
+    - paragraph [ref=e241]: "\"不是奶昔，是用北海道 + 荔枝味 gelato 球现打的。\""
+    - text: — brief 关键句（最推荐）
+  - complementary [ref=e242]:
+    - generic [ref=e243]:
+      - generic [ref=e244]: Series
+      - generic [ref=e245]: All series
+    - generic [ref=e246]:
+      - generic [ref=e247]: Published
+      - generic [ref=e248]: 2026-06-09
+    - generic [ref=e249]:
+      - generic [ref=e250]: Volume
+      - generic [ref=e251]: "04"

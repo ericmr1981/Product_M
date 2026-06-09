@@ -12,9 +12,10 @@
  * Override with PRODUCT_M_MCP_PORT env var.
  *
  * Endpoints:
- *   POST /mcp     — JSON-RPC 2.0
- *   GET  /health  — { status: "ok", version: "0.1.0" }
- *   GET  /        — HTML page listing the 4 tools (human-readable)
+ *   POST /mcp        — JSON-RPC 2.0
+ *   GET  /health     — { status: "ok", version: "0.1.0" }
+ *   GET  /           — HTML page listing the tools (human-readable)
+ *   POST /api/import — Remote document import (Ella agent)
  *
  * No external dependencies. Uses only Node built-ins.
  */
@@ -29,6 +30,11 @@ const ROOT = path.resolve(__dirname, '..');
 const PORT = parseInt(process.env.PRODUCT_M_MCP_PORT || '7331', 10);
 const HOST = '0.0.0.0';
 const VERSION = '0.1.0';
+const IMPORT_KEY = process.env.PRODUCT_M_IMPORT_KEY || '';
+
+// API request size limits
+const MAX_HTML_SIZE = 500 * 1024;      // 500 KB
+const MAX_ASSETS_TOTAL = 10 * 1024 * 1024; // 10 MB
 
 const TOOLS = [
   {
@@ -237,6 +243,15 @@ ${TOOLS.map((t) => `<li><strong>${t.name}</strong> — ${t.description}</li>`).j
       res.end(JSON.stringify(response));
       return;
     }
+    if (req.method === 'GET' && url.pathname === '/api/import/health') {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', import_endpoint: true, version: VERSION }));
+      return;
+    }
+    if (req.method === 'POST' && url.pathname === '/api/import') {
+      await handleApiImport(req, res);
+      return;
+    }
     res.writeHead(404, { 'content-type': 'text/plain' });
     res.end('Not Found');
   } catch (err) {
@@ -254,3 +269,173 @@ server.listen(PORT, HOST, () => {
 
 process.on('SIGINT', () => { server.close(); process.exit(0); });
 process.on('SIGTERM', () => { server.close(); process.exit(0); });
+
+// =========================================================================
+// POST /api/import — remote document import (Ella agent)
+// =========================================================================
+
+function jsonResponse(res, statusCode, body) {
+  res.writeHead(statusCode, { 'content-type': 'application/json' });
+  res.end(JSON.stringify(body));
+}
+
+function safePath(targetPath, allowedPrefixes) {
+  const prefixes = allowedPrefixes || ['docs/', 'planning/'];
+  const ok = prefixes.some(p => targetPath.startsWith(p));
+  if (!ok) {
+    return { ok: false, reason: `path must start with ${prefixes.join(' or ')} (got ${targetPath})` };
+  }
+  if (targetPath.includes('..')) {
+    return { ok: false, reason: `path traversal rejected: ${targetPath}` };
+  }
+  return { ok: true, abs: path.resolve(ROOT, targetPath) };
+}
+
+async function handleApiImport(req, res) {
+  let body;
+  try {
+    body = await readBody(req);
+  } catch {
+    return jsonResponse(res, 400, { ok: false, error: 'failed to read request body' });
+  }
+
+  // Parse JSON
+  let payload;
+  try { payload = JSON.parse(body); } catch {
+    return jsonResponse(res, 400, { ok: false, error: 'invalid JSON' });
+  }
+
+  // Auth
+  if (!IMPORT_KEY) {
+    return jsonResponse(res, 500, { ok: false, error: 'PRODUCT_M_IMPORT_KEY not configured on server' });
+  }
+  if (payload.api_key !== IMPORT_KEY) {
+    return jsonResponse(res, 401, { ok: false, error: 'unauthorized: invalid api_key' });
+  }
+
+  // Validate required fields
+  for (const field of ['md_source', 'html', 'slug', 'series', 'target_path', 'source_path']) {
+    if (!payload[field]) {
+      return jsonResponse(res, 400, { ok: false, error: `missing required field: ${field}` });
+    }
+  }
+
+  // Validate series
+  const validSeries = ['gelato', 'gelato-mix', 'gelato-shake', null];
+  if (!validSeries.includes(payload.series)) {
+    return jsonResponse(res, 400, { ok: false, error: `invalid series: ${payload.series}. Must be gelato, gelato-mix, gelato-shake, or null` });
+  }
+
+  // Path safety
+  const target = safePath(payload.target_path);
+  if (!target.ok) return jsonResponse(res, 400, { ok: false, error: target.reason });
+  const source = safePath(payload.source_path, ['sources/', 'docs/', 'planning/']);
+  if (!source.ok) return jsonResponse(res, 400, { ok: false, error: `source_path: ${source.reason}` });
+
+  // Size limits
+  if (Buffer.byteLength(payload.html, 'utf8') > MAX_HTML_SIZE) {
+    return jsonResponse(res, 413, { ok: false, error: `HTML exceeds ${MAX_HTML_SIZE / 1024} KB limit` });
+  }
+
+  // Validate assets
+  const assets = payload.assets || [];
+  let assetsTotalSize = 0;
+  for (const a of assets) {
+    if (a.base64_content) {
+      const decoded = Buffer.from(a.base64_content, 'base64');
+      assetsTotalSize += decoded.length;
+      // Extra safety: reject large decoded files
+      if (decoded.length > 5 * 1024 * 1024) {
+        return jsonResponse(res, 413, { ok: false, error: `asset ${a.local_path} exceeds 5 MB limit` });
+      }
+    }
+  }
+  if (assetsTotalSize > MAX_ASSETS_TOTAL) {
+    return jsonResponse(res, 413, { ok: false, error: `assets total size exceeds ${MAX_ASSETS_TOTAL / 1024 / 1024} MB limit` });
+  }
+
+  // ---- Step 1: Validate HTML (before writing anything) ----
+  const validateResult = runValidate({ html: payload.html });
+  if (!validateResult.passed) {
+    return jsonResponse(res, 422, { ok: false, validation: validateResult });
+  }
+
+  // ---- Step 2: Write MD source ----
+  try {
+    fs.mkdirSync(path.dirname(source.abs), { recursive: true });
+    fs.writeFileSync(source.abs, payload.md_source, 'utf8');
+  } catch (err) {
+    return jsonResponse(res, 500, { ok: false, error: `failed to write MD source: ${err.message}` });
+  }
+
+  // ---- Step 3: Write HTML ----
+  try {
+    fs.mkdirSync(path.dirname(target.abs), { recursive: true });
+    fs.writeFileSync(target.abs, payload.html, 'utf8');
+  } catch (err) {
+    // Rollback: remove MD if HTML write fails
+    try { fs.unlinkSync(source.abs); } catch {}
+    return jsonResponse(res, 500, { ok: false, error: `failed to write HTML: ${err.message}` });
+  }
+
+  // ---- Step 4: Decode and write assets ----
+  const writtenAssets = [];
+  const assetErrors = [];
+  for (const a of assets) {
+    if (!a.local_path || !a.base64_content) continue;
+    // local_path must be relative to project and start with assets/
+    if (a.local_path.includes('..')) {
+      assetErrors.push(`rejected: ${a.local_path}`);
+      continue;
+    }
+    const assetAbs = path.resolve(ROOT, a.local_path);
+    if (!assetAbs.startsWith(path.resolve(ROOT, 'assets/')) && assetAbs !== path.resolve(ROOT, 'assets/')) {
+      assetErrors.push(`not under assets/: ${a.local_path}`);
+      continue;
+    }
+    try {
+      const buf = Buffer.from(a.base64_content, 'base64');
+      fs.mkdirSync(path.dirname(assetAbs), { recursive: true });
+      fs.writeFileSync(assetAbs, buf);
+      writtenAssets.push(a.local_path);
+    } catch (err) {
+      assetErrors.push(`${a.local_path}: ${err.message}`);
+    }
+  }
+
+  // ---- Step 5: Rebuild index ----
+  let indexOutput = '';
+  let indexRebuilt = false;
+  try {
+    const out = execFileSync('node', [path.join(ROOT, 'scripts/build-index.js')], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    indexOutput = out.trim();
+    indexRebuilt = true;
+  } catch (err) {
+    indexOutput = (err.stderr || err.stdout || err.message).trim();
+  }
+
+  // ---- Step 6: Git diff summary ----
+  let gitDiff = '';
+  try {
+    execFileSync('git', ['add', '-A', '.'], { cwd: ROOT, stdio: 'ignore' });
+    const diffOut = execFileSync('git', ['diff', '--cached', '--stat'], { cwd: ROOT, encoding: 'utf8' });
+    gitDiff = diffOut.trim();
+  } catch {
+    gitDiff = '(git diff not available)';
+  }
+
+  return jsonResponse(res, 200, {
+    ok: true,
+    written_to: payload.target_path,
+    source_written_to: payload.source_path,
+    validation: validateResult,
+    index_rebuilt: indexRebuilt,
+    index_output: indexOutput,
+    git_diff_summary: gitDiff,
+    assets_uploaded: writtenAssets,
+    asset_errors: assetErrors.length ? assetErrors : undefined,
+  });
+}
