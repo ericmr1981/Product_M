@@ -1,0 +1,58 @@
+/* =========================================================================
+   Product M — Design Tokens
+   The single source of truth for colors, type, spacing.
+   All other CSS and agent-generated HTML must use var(--*) references.
+   ========================================================================= */
+
+:root {
+  /* Color — forest green editorial palette */
+  --ink: #1f3a2e;           /* primary: forest green */
+  --ink-soft: #3a5a4a;      /* secondary: links, sub-headings */
+  --ink-muted: #6b7a72;     /* tertiary: meta, footer, dates */
+  --paper: #f5f3eb;         /* background: warm paper */
+  --paper-deep: #ebe7d8;    /* card / section background */
+  --rule: #d8d3c4;          /* dividers */
+  --highlight: #b8a878;     /* gold accent: numbers, badges */
+  --on-ink: #f5f3eb;        /* text on dark backgrounds */
+
+  /* Type stacks */
+  --font-serif: 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+  /* Font sizes (rem; root 16px) */
+  --fs-xs: 0.75rem;     /* 12px - labels, eyebrows */
+  --fs-sm: 0.875rem;    /* 14px - secondary text */
+  --fs-base: 1rem;      /* 16px - body */
+  --fs-md: 1.125rem;    /* 18px - emphasized body */
+  --fs-lg: 1.5rem;      /* 24px - small headings */
+  --fs-xl: 2rem;        /* 32px - section titles */
+  --fs-2xl: 3rem;       /* 48px - page titles */
+  --fs-3xl: 4.5rem;     /* 72px - hero */
+  --fs-display: 6rem;   /* 96px - magazine cover */
+
+  /* Spacing scale (rem) */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-24: 6rem;
+  --sp-32: 8rem;
+
+  /* Layout */
+  --max-width: 1280px;
+  --content-width: 720px;     /* document body line-length */
+  --gutter: 2rem;            /* mobile padding */
+}
+
+@media (max-width: 720px) {
+  :root {
+    --fs-3xl: 3rem;          /* 48px on mobile */
+    --fs-display: 3.5rem;    /* 56px on mobile */
+    --gutter: 1.25rem;
+  }
+}
