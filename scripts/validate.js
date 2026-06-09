@@ -204,6 +204,11 @@ function rule(name, check) {
 //   no-hardcoded-tokens
 
 function runAll(html) {
+  // Structural pages (e.g. planning/index.html, series/*.html) use site-nav / series-hero
+  // and are not Product M content documents — skip the 7 design rules for them.
+  if (html.includes('class="site-nav"') || html.includes('class="series-hero"') || html.includes("class='site-nav'") || html.includes("class='series-hero'")) {
+    return { passed: true, errors: [], warnings: [], skipped: 'structural-page' };
+  }
   const errors = [];
   const warnings = [];
   for (const r of RULES) {
