@@ -313,17 +313,27 @@ async function handleApiImport(req, res) {
     return jsonResponse(res, 401, { ok: false, error: 'unauthorized: invalid api_key' });
   }
 
-  // Validate required fields
-  for (const field of ['md_source', 'html', 'slug', 'series', 'target_path', 'source_path']) {
+  // Validate required fields (series is optional; planning/* paths auto-derive null)
+  for (const field of ['md_source', 'html', 'slug', 'target_path', 'source_path']) {
     if (!payload[field]) {
       return jsonResponse(res, 400, { ok: false, error: `missing required field: ${field}` });
     }
   }
 
-  // Validate series
-  const validSeries = ['gelato', 'gelato-mix', 'gelato-shake', null];
-  if (!validSeries.includes(payload.series)) {
-    return jsonResponse(res, 400, { ok: false, error: `invalid series: ${payload.series}. Must be gelato, gelato-mix, gelato-shake, or null` });
+  // Auto-derive: planning/<slug>.html → series = null
+  if (payload.target_path.startsWith('planning/') && payload.series === undefined) {
+    payload.series = null;
+  }
+
+  // Validate series (if provided)
+  if (payload.series !== undefined) {
+    const validSeries = ['gelato', 'gelato-mix', 'gelato-shake', null];
+    if (!validSeries.includes(payload.series)) {
+      return jsonResponse(res, 400, { ok: false, error: `invalid series: ${JSON.stringify(payload.series)}. Must be gelato, gelato-mix, gelato-shake, or null` });
+    }
+  } else if (!payload.target_path.startsWith('planning/')) {
+    // series is required for non-planning paths
+    return jsonResponse(res, 400, { ok: false, error: `missing required field: series` });
   }
 
   // Path safety
