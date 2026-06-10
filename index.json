@@ -1,6 +1,21 @@
 {
-  "generated": "2026-06-09T16:38:43.168Z",
+  "generated": "2026-06-10T08:57:41.782Z",
   "documents": [
+    {
+      "title": "迷你冰糕",
+      "path": "docs/gelato-shake/mini-bing-gao.html",
+      "series": "gelato-shake",
+      "slug": "mini-bing-gao",
+      "date": "2026-06-09",
+      "tags": [
+        "summer-2026",
+        "signature",
+        "mini",
+        "5-flavor"
+      ],
+      "summary": "5 颗一口一个的 mini 3D 水果 gelato — 草莓/开心果/芒果/葡萄/香蕉，一盒尝遍 5 种夏天。",
+      "volume": "04"
+    },
     {
       "title": "海盐荔枝芒芒",
       "path": "docs/gelato-shake/海盐荔枝芒芒.html",
@@ -101,7 +116,7 @@
       "slug": "gelato-shake",
       "name": "Gelato Shake",
       "description": "Spoon-thick shakes, made to order.",
-      "count": 2
+      "count": 3
     }
   ]
 }
