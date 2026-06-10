@@ -30,7 +30,10 @@ const ROOT = path.resolve(__dirname, '..');
 const PORT = parseInt(process.env.PRODUCT_M_MCP_PORT || '7331', 10);
 const HOST = '0.0.0.0';
 const VERSION = '0.1.0';
-const IMPORT_KEY = process.env.PRODUCT_M_IMPORT_KEY || '';
+// Defensive normalize: strip UTF-8 BOM, surrounding quotes (systemd EnvironmentFile
+// may pass through "key"), and any leading/trailing whitespace/newline.
+const RAW_KEY = process.env.PRODUCT_M_IMPORT_KEY || '';
+const IMPORT_KEY = RAW_KEY.replace(/^\uFEFF/, '').replace(/^["']|["']$/g, '').trim();
 
 // API request size limits
 const MAX_HTML_SIZE = 500 * 1024;      // 500 KB
@@ -309,7 +312,9 @@ async function handleApiImport(req, res) {
   if (!IMPORT_KEY) {
     return jsonResponse(res, 500, { ok: false, error: 'PRODUCT_M_IMPORT_KEY not configured on server' });
   }
-  if (payload.api_key !== IMPORT_KEY) {
+  if ((payload.api_key || '').trim() !== IMPORT_KEY) {
+    // Debug log so server-side tail can show what import_key actually is.
+    console.error(`[auth] mismatch import_key.length=${IMPORT_KEY.length} import_key.hex=${Buffer.from(IMPORT_KEY).toString('hex')} payload.api_key.length=${(payload.api_key || '').length} payload.api_key.hex=${Buffer.from(payload.api_key || '').toString('hex')}`);
     return jsonResponse(res, 401, { ok: false, error: 'unauthorized: invalid api_key' });
   }
 
