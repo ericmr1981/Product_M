@@ -194,9 +194,67 @@ The batch mode renames all `.jpg`/`.png` files in the source directory to `<slug
 
 Re-run `validate_doc` — the `no-external-resources` rule checks image paths start with `/assets/`, and the verification step checks the files actually exist on disk. If images are missing, the validate step will warn.
 
-## The 4 MCP tools
+## The 4 MCP tools + HTTP API
 
-The Product M MCP server exposes 4 tools. Assume they are available; if a tool call returns "tool not found" or a connection error, fall back to the CLI equivalents at the bottom of this skill.
+Product M exposes both MCP JSON-RPC tools and a public HTTP API. Remote agents (like Ella) use the HTTP API; local agents use MCP.
+
+### HTTP API (remote agents)
+
+```
+Base URL: http://112.124.18.246:8085
+```
+
+| Endpoint | Method | Auth | Description |
+| --- | --- | --- | --- |
+| `/api/import/health` | GET | None | Health check |
+| `/api/import` | POST | `api_key` field | Import a document (MD + HTML + assets) |
+
+**POST /api/import** — the main entry point for Ella to publish documents.
+
+Request body:
+```json
+{
+  "api_key": "<from env PRODUCT_M_IMPORT_KEY>",
+  "md_source": "<full MD with YAML frontmatter>",
+  "html": "<full rendered HTML>",
+  "slug": "mini-bing-gao",
+  "series": "gelato | gelato-mix | gelato-shake | null",
+  "target_path": "docs/gelato-shake/mini-bing-gao.html",
+  "source_path": "sources/gelato-shake/mini-bing-gao.md",
+  "assets": [
+    {"local_path": "assets/images/<slug>/<slug>-01.jpg", "base64_content": "..."}
+  ]
+}
+```
+
+Response (200 OK):
+```json
+{
+  "ok": true,
+  "written_to": "docs/gelato-shake/mini-bing-gao.html",
+  "source_written_to": "sources/gelato-shake/mini-bing-gao.md",
+  "validation": {"passed": true, "errors": [], "warnings": []},
+  "index_rebuilt": true,
+  "git_diff_summary": " docs/gelato-shake/mini-bing-gao.html | 200 +++..."
+}
+```
+
+Error codes: 401 (bad api_key), 400 (bad path), 413 (size limit), 422 (emoji / validation failed).
+
+What the endpoint does: auth → writes MD → writes HTML → decodes base64 assets → runs `validate.js` → runs `build-index.js` → runs `git add . && git diff --cached --stat` → returns result. Does NOT auto-commit.
+
+### Remote workflow (Ella agent)
+
+```
+1. Write MD source with YAML frontmatter + tagged H2 sections
+2. Run: node scripts/md-to-html.js --input <source.md> --output <output.html>
+3. POST /api/import with { md_source, html, slug, series, target_path, source_path, assets, api_key }
+4. Check response: ok:true → done; ok:false → fix errors in validation.errors, retry
+```
+
+If `md-to-html.js` is not available on Ella's machine, Ella can download it from: `http://112.124.18.246:8085/scripts/md-to-html.js`
+
+### MCP tools (local agents)
 
 | Tool | What it does |
 | --- | --- |
